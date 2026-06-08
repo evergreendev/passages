@@ -2,6 +2,11 @@
 const config = {
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'Arial', 'sans-serif'],
+        serif: ['var(--font-cormorant-garamond)', 'Georgia', 'serif'],
+        display: ['var(--font-cormorant-garamond)', 'Georgia', 'serif'],
+      },
       typography: {
         DEFAULT: {
           css: [
@@ -9,8 +14,15 @@ const config = {
               '--tw-prose-body': 'var(--text)',
               '--tw-prose-headings': 'var(--text)',
               h1: {
+                fontFamily: 'var(--font-cormorant-garamond), Georgia, serif',
                 fontWeight: 'normal',
                 marginBottom: '0.25em',
+              },
+              h2: {
+                fontFamily: 'var(--font-cormorant-garamond), Georgia, serif',
+              },
+              h3: {
+                fontFamily: 'var(--font-cormorant-garamond), Georgia, serif',
               },
             },
           ],

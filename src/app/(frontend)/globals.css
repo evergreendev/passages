@@ -16,6 +16,7 @@
   h4,
   h5,
   h6 {
+    font-family: var(--font-cormorant-garamond), Georgia, serif;
     font-weight: unset;
     font-size: unset;
   }
@@ -42,8 +43,10 @@
   --breakpoint-lg: 64rem;
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
-  --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter), Arial, sans-serif;
+  --font-serif: var(--font-cormorant-garamond), Georgia, serif;
+  --font-display: var(--font-cormorant-garamond), Georgia, serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
   --color-passages-blue: #203898;
   --color-passages-blue-deep: #183880;
   --color-passages-blue-soft: #4860a8;
@@ -183,6 +186,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    @apply bg-background text-foreground min-h-[100vh] flex flex-col font-sans;
   }
 }

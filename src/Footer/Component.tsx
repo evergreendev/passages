@@ -6,7 +6,10 @@ import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 
 export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
+  const [footerData, siteSettings] = await Promise.all([
+    getCachedGlobal('footer', 1)(),
+    getCachedGlobal('site-settings', 1)(),
+  ])
 
   const navItems = footerData?.navItems || []
 
@@ -14,7 +17,7 @@ export async function Footer() {
     <footer className="mt-auto border-t border-border bg-primary text-primary-foreground">
       <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
         <Link className="flex items-center" href="/">
-          <Logo />
+          <Logo siteSettings={siteSettings} />
         </Link>
 
         <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
