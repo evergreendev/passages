@@ -55,7 +55,7 @@ export const PassagesHeroBlock = async ({
   const event = await getUpcomingEvent()
 
   return (
-    <section className="relative -mt-16 min-h-[680px] overflow-hidden bg-[#d9e8eb]">
+    <section className="relative -mt-16 min-h-[680px] overflow-hidden bg-[#d9e8eb] md:aspect-[1400/680] md:min-h-0">
       <Media
         fill
         imgClassName="object-cover object-center"
@@ -65,7 +65,7 @@ export const PassagesHeroBlock = async ({
       />
       <div className="absolute inset-0 bg-white/10" />
 
-      <div className="relative z-10 flex min-h-[680px] flex-col justify-end">
+      <div className="relative z-10 flex min-h-[680px] flex-col justify-end md:absolute md:inset-0 md:min-h-0">
         <div className="container flex flex-1 flex-col justify-center pb-12 pt-28">
           {logo && typeof logo === 'object' ? (
             <Media
