@@ -4,16 +4,26 @@ import type { Page } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { ContactBandBlock } from '@/blocks/ContactBand/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
+import { IntroTextBlock } from '@/blocks/IntroText/Component'
+import { InvolvementCardsBlock } from '@/blocks/InvolvementCards/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { PassagesHeroBlock } from '@/blocks/PassagesHero/Component'
+import { ProgramOverviewBlock } from '@/blocks/ProgramOverview/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
+  contactBand: ContactBandBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
+  introText: IntroTextBlock,
+  involvementCards: InvolvementCardsBlock,
   mediaBlock: MediaBlock,
+  passagesHero: PassagesHeroBlock,
+  programOverview: ProgramOverviewBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -34,10 +44,10 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div className="my-16" key={index}>
+                <Fragment key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
-                </div>
+                </Fragment>
               )
             }
           }

@@ -203,7 +203,18 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | PassagesHeroBlock
+    | IntroTextBlock
+    | ProgramOverviewBlock
+    | InvolvementCardsBlock
+    | ContactBandBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -440,6 +451,190 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PassagesHeroBlock".
+ */
+export interface PassagesHeroBlock {
+  backgroundImage: number | Media;
+  /**
+   * Optional brand image shown over the hero.
+   */
+  logo?: (number | null) | Media;
+  event: {
+    title: string;
+    dateText: string;
+    /**
+     * Optional event reservation link.
+     */
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+    };
+  };
+  headline: string;
+  actions?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        style: 'green' | 'blue' | 'outline';
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'passagesHero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IntroTextBlock".
+ */
+export interface IntroTextBlock {
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'introText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramOverviewBlock".
+ */
+export interface ProgramOverviewBlock {
+  heading: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  areas?:
+    | {
+        label: string;
+        icon: 'lifeSkills' | 'employment' | 'spiritualGrowth' | 'physicalHealth' | 'relationships';
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional centered call to action.
+   */
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'programOverview';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InvolvementCardsBlock".
+ */
+export interface InvolvementCardsBlock {
+  heading: string;
+  cards?:
+    | {
+        title: string;
+        description: string;
+        icon: 'heart' | 'people' | 'bed' | 'mail' | 'phone';
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        buttonStyle: 'blue' | 'green';
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'involvementCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBandBlock".
+ */
+export interface ContactBandBlock {
+  items: {
+    icon: 'mail' | 'phone';
+    label: string;
+    lines: {
+      text: string;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contactBand';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1086,6 +1281,11 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        passagesHero?: T | PassagesHeroBlockSelect<T>;
+        introText?: T | IntroTextBlockSelect<T>;
+        programOverview?: T | ProgramOverviewBlockSelect<T>;
+        involvementCards?: T | InvolvementCardsBlockSelect<T>;
+        contactBand?: T | ContactBandBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1105,6 +1305,130 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PassagesHeroBlock_select".
+ */
+export interface PassagesHeroBlockSelect<T extends boolean = true> {
+  backgroundImage?: T;
+  logo?: T;
+  event?:
+    | T
+    | {
+        title?: T;
+        dateText?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+      };
+  headline?: T;
+  actions?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        style?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IntroTextBlock_select".
+ */
+export interface IntroTextBlockSelect<T extends boolean = true> {
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramOverviewBlock_select".
+ */
+export interface ProgramOverviewBlockSelect<T extends boolean = true> {
+  heading?: T;
+  content?: T;
+  areas?:
+    | T
+    | {
+        label?: T;
+        icon?: T;
+        id?: T;
+      };
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InvolvementCardsBlock_select".
+ */
+export interface InvolvementCardsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  cards?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        buttonStyle?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBandBlock_select".
+ */
+export interface ContactBandBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        icon?: T;
+        label?: T;
+        lines?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1639,6 +1963,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  /**
+   * Optional site logo. Falls back to the default template logo when empty.
+   */
+  logo?: (number | null) | Media;
   navItems?:
     | {
         link: {
@@ -1656,6 +1984,27 @@ export interface Header {
           url?: string | null;
           label: string;
         };
+        id?: string | null;
+      }[]
+    | null;
+  ctaLinks?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        style: 'blue' | 'green';
         id?: string | null;
       }[]
     | null;
@@ -1711,6 +2060,7 @@ export interface SiteSetting {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
   navItems?:
     | T
     | {
@@ -1723,6 +2073,21 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        id?: T;
+      };
+  ctaLinks?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        style?: T;
         id?: T;
       };
   updatedAt?: T;

@@ -10,6 +10,14 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logo',
+      type: 'upload',
+      admin: {
+        description: 'Optional site logo. Falls back to the default template logo when empty.',
+      },
+      relationTo: 'media',
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [
@@ -23,6 +31,36 @@ export const Header: GlobalConfig = {
         components: {
           RowLabel: '@/Header/RowLabel#RowLabel',
         },
+      },
+    },
+    {
+      name: 'ctaLinks',
+      type: 'array',
+      fields: [
+        link({
+          appearances: false,
+        }),
+        {
+          name: 'style',
+          type: 'select',
+          defaultValue: 'blue',
+          options: [
+            {
+              label: 'Blue',
+              value: 'blue',
+            },
+            {
+              label: 'Green',
+              value: 'green',
+            },
+          ],
+          required: true,
+        },
+      ],
+      label: 'CTA links',
+      maxRows: 2,
+      admin: {
+        initCollapsed: true,
       },
     },
   ],
