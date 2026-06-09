@@ -25,31 +25,6 @@ export const PassagesHero: Block = {
       relationTo: 'media',
     },
     {
-      name: 'event',
-      type: 'group',
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'dateText',
-          type: 'text',
-          label: 'Date text',
-          required: true,
-        },
-        link({
-          appearances: false,
-          overrides: {
-            admin: {
-              description: 'Optional event reservation link.',
-            },
-          },
-        }),
-      ],
-    },
-    {
       name: 'headline',
       type: 'textarea',
       required: true,

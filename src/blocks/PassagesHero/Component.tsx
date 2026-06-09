@@ -3,6 +3,10 @@ import type { PassagesHeroBlock as PassagesHeroBlockProps } from '@/payload-type
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import { cn } from '@/utilities/ui'
+import configPromise from '@payload-config'
+import { draftMode } from 'next/headers'
+import Link from 'next/link'
+import { getPayload } from 'payload'
 
 const actionClasses = {
   blue: 'bg-[#273f98] text-white hover:bg-[#20337c]',
@@ -10,13 +14,46 @@ const actionClasses = {
   outline: 'border-2 border-white bg-transparent text-white hover:bg-white/10',
 }
 
-export const PassagesHeroBlock: React.FC<PassagesHeroBlockProps> = ({
+const formatEventDate = (date: string) => {
+  return new Intl.DateTimeFormat('en-US', {
+    day: 'numeric',
+    month: 'long',
+    timeZone: 'America/Denver',
+    weekday: 'long',
+    year: 'numeric',
+  }).format(new Date(date))
+}
+
+const getUpcomingEvent = async () => {
+  const { isEnabled: draft } = await draftMode()
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'events',
+    depth: 0,
+    draft,
+    limit: 1,
+    overrideAccess: draft,
+    pagination: false,
+    sort: 'startDate',
+    where: {
+      startDate: {
+        greater_than_equal: new Date().toISOString(),
+      },
+    },
+  })
+
+  return result.docs[0] || null
+}
+
+export const PassagesHeroBlock = async ({
   actions,
   backgroundImage,
-  event,
   headline,
   logo,
-}) => {
+}: PassagesHeroBlockProps) => {
+  const event = await getUpcomingEvent()
+
   return (
     <section className="relative -mt-16 min-h-[680px] overflow-hidden bg-[#d9e8eb]">
       <Media
@@ -40,25 +77,26 @@ export const PassagesHeroBlock: React.FC<PassagesHeroBlockProps> = ({
           ) : null}
         </div>
 
-        <div className="bg-white/45 py-5 text-[#273f98] backdrop-blur-[2px]">
-          <div className="container">
+        {event ? (
+          <div className="w-full bg-white/55 py-5 pl-4 pr-8 text-[#273f98] backdrop-blur-[2px] md:w-[60%] md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
             <p className="text-3xl font-extrabold uppercase leading-none md:text-4xl">
-              {event?.title}
+              {event.title}
             </p>
-            <p className="mt-1 text-xl font-bold md:text-2xl">{event?.dateText}</p>
-            {event?.link ? (
-              <CMSLink
-                {...event.link}
-                appearance="inline"
-                className="mt-3 inline-block text-xl font-medium italic underline md:ml-72 md:text-2xl"
-              />
-            ) : null}
+            <p className="mt-1 text-xl font-bold md:text-2xl">{formatEventDate(event.startDate)}</p>
+            <Link
+              className="mt-3 inline-block text-xl font-medium italic underline md:ml-72 md:text-2xl"
+              href={event.externalLink}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Reserve your seat
+            </Link>
           </div>
-        </div>
+        ) : null}
 
-        <div className="bg-[#1f3b95]/85 py-8 text-white">
-          <div className="container">
-            <h1 className="max-w-4xl font-serif text-3xl leading-tight md:text-5xl">{headline}</h1>
+        <div className="w-full bg-linear-to-r from-[#1f3b95]/90 from-0% via-[#1f3b95]/85 via-80% to-transparent to-100% py-8 pl-4 pr-[18vw] text-white md:w-2/3 md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
+          <div className="max-w-4xl">
+            <h1 className="font-serif text-3xl leading-tight md:text-5xl">{headline}</h1>
             {actions?.length ? (
               <div className="mt-8 flex flex-wrap gap-3">
                 {actions.map((action) => (
