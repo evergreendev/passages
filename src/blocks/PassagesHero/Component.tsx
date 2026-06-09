@@ -66,7 +66,7 @@ export const PassagesHeroBlock = async ({
       <div className="absolute inset-0 bg-white/10" />
 
       <div className="relative z-10 flex min-h-[680px] flex-col justify-end md:absolute md:inset-0 md:min-h-0">
-        <div className="container flex flex-1 flex-col justify-center pb-12 pt-28">
+        <div className="absolute left-8 top-4 md:left-16 md:top-6">
           {logo && typeof logo === 'object' ? (
             <Media
               imgClassName="h-auto w-[280px] max-w-[75vw]"
@@ -76,6 +76,8 @@ export const PassagesHeroBlock = async ({
             />
           ) : null}
         </div>
+
+        <div className="flex-1" />
 
         {event ? (
           <div className="w-full bg-white/55 py-5 pl-4 pr-8 text-[#273f98] backdrop-blur-[2px] md:w-[60%] md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
