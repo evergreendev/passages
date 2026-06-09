@@ -12,23 +12,17 @@ export const SiteSettings: GlobalConfig = {
   },
   fields: [
     {
-      name: 'logo',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Primary site logo used in the header and footer.',
-      },
-    },
-    {
       name: 'siteTitle',
       type: 'text',
       defaultValue: 'Passages',
       required: true,
     },
     {
-      name: 'siteDescription',
+      name: 'metaDescription',
       type: 'text',
-      defaultValue: "Women's Transitional Living",
+      defaultValue:
+        "Passages Women's Transitional Living helps women move toward stability, purpose, and independence.",
+      label: 'Meta description',
       required: true,
     },
   ],

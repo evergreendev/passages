@@ -1,9 +1,7 @@
 import clsx from 'clsx'
 import React from 'react'
 
-import type { Media as MediaType, SiteSetting } from '@/payload-types'
-
-import { Media } from '@/components/Media'
+import type { SiteSetting } from '@/payload-types'
 
 interface Props {
   className?: string
@@ -13,38 +11,22 @@ interface Props {
 }
 
 export const Logo = (props: Props) => {
-  const { className, loading: loadingFromProps, priority: priorityFromProps, siteSettings } = props
+  const { className, siteSettings } = props
 
-  const logo = siteSettings?.logo
   const siteTitle = siteSettings?.siteTitle || 'Passages'
-  const siteDescription = siteSettings?.siteDescription || "Women's Transitional Living"
-  const priority = priorityFromProps === 'high'
-  const loading = loadingFromProps || 'lazy'
-
-  if (logo && typeof logo === 'object') {
-    return (
-      <span
-        aria-label={`${siteTitle}${siteDescription ? ` - ${siteDescription}` : ''}`}
-        className={clsx('block w-[12.5rem] sm:w-[14.5rem]', className)}
-      >
-        <Media
-          htmlElement={null}
-          imgClassName="h-auto w-full object-contain"
-          loading={loading}
-          priority={priority}
-          resource={logo as MediaType}
-          size="14.5rem"
-        />
-      </span>
-    )
-  }
+  const metaDescription = siteSettings?.metaDescription || "Women's Transitional Living"
+  const brandSubtitle = "Women's Transitional Living"
 
   return (
     <span
-      aria-label={`${siteTitle}${siteDescription ? ` - ${siteDescription}` : ''}`}
+      aria-label={`${siteTitle}${metaDescription ? ` - ${metaDescription}` : ''}`}
       className={clsx('flex w-[12.5rem] flex-col text-passages-blue sm:w-[14.5rem]', className)}
     >
-      <svg aria-hidden="true" className="mb-1 h-auto w-[7.25rem] sm:w-[8.5rem]" viewBox="0 0 220 156">
+      <svg
+        aria-hidden="true"
+        className="mb-1 h-auto w-[7.25rem] sm:w-[8.5rem]"
+        viewBox="0 0 220 156"
+      >
         <path
           d="M24 110c26-36 70-39 116-10 21 13 42 10 68-2 8-4 16 9 6 14-38 19-76 30-120 12-24-10-50-11-70-4-7 2-13-4-9-10Z"
           fill="currentColor"
@@ -71,7 +53,7 @@ export const Logo = (props: Props) => {
         {siteTitle}
       </span>
       <span className="font-sans text-[0.6rem] font-semibold uppercase leading-none tracking-normal sm:text-[0.72rem]">
-        {siteDescription}
+        {brandSubtitle}
       </span>
     </span>
   )

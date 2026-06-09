@@ -9,6 +9,7 @@ import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
@@ -53,11 +54,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   )
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  openGraph: mergeOpenGraph(),
-  twitter: {
-    card: 'summary_large_image',
-    creator: '@payloadcms',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const siteSettings = await getCachedGlobal('site-settings', 0)()
+  const title = siteSettings.siteTitle || 'Passages'
+  const description = siteSettings.metaDescription || ''
+
+  return {
+    description,
+    metadataBase: new URL(getServerSideURL()),
+    openGraph: mergeOpenGraph({
+      description,
+      siteName: title,
+      title,
+    }),
+    title,
+    twitter: {
+      card: 'summary_large_image',
+    },
+  }
 }

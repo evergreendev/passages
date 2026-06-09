@@ -2055,12 +2055,8 @@ export interface Footer {
  */
 export interface SiteSetting {
   id: number;
-  /**
-   * Primary site logo used in the header and footer.
-   */
-  logo?: (number | null) | Media;
   siteTitle: string;
-  siteDescription: string;
+  metaDescription: string;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2119,9 +2115,8 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  logo?: T;
   siteTitle?: T;
-  siteDescription?: T;
+  metaDescription?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
