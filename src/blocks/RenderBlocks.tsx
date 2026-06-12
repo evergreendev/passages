@@ -11,6 +11,7 @@ import { IntroTextBlock } from '@/blocks/IntroText/Component'
 import { InvolvementCardsBlock } from '@/blocks/InvolvementCards/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { PassagesHeroBlock } from '@/blocks/PassagesHero/Component'
+import { PreApplicationFormBlock } from '@/blocks/PreApplicationFormBlock/Component'
 import { ProgramOverviewBlock } from '@/blocks/ProgramOverview/Component'
 
 const blockComponents = {
@@ -23,6 +24,7 @@ const blockComponents = {
   involvementCards: InvolvementCardsBlock,
   mediaBlock: MediaBlock,
   passagesHero: PassagesHeroBlock,
+  preApplicationFormBlock: PreApplicationFormBlock,
   programOverview: ProgramOverviewBlock,
 }
 

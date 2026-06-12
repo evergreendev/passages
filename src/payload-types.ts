@@ -70,6 +70,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     events: Event;
+    preApplications: PreApplication;
     media: Media;
     categories: Category;
     users: User;
@@ -93,6 +94,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
+    preApplications: PreApplicationsSelect<false> | PreApplicationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -216,6 +218,7 @@ export interface Page {
     | MediaBlock
     | ArchiveBlock
     | FormBlock
+    | PreApplicationFormBlock
   )[];
   meta?: {
     title?: string | null;
@@ -960,6 +963,23 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PreApplicationFormBlock".
+ */
+export interface PreApplicationFormBlock {
+  heading: string;
+  introText?: string | null;
+  successMessage: string;
+  submitButtonText: string;
+  /**
+   * Send notification emails after each submission. Enter one email per line or separate addresses with commas.
+   */
+  notificationEmails?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'preApplicationFormBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -985,6 +1005,58 @@ export interface Event {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "preApplications".
+ */
+export interface PreApplication {
+  id: number;
+  notificationEmails?: string | null;
+  firstName: string;
+  lastName: string;
+  otherKnownNames?: string | null;
+  phoneNumber?: string | null;
+  dateOfBirth: string;
+  email: string;
+  currentlyIncarcerated: 'yes' | 'no';
+  caseManager?: string | null;
+  previouslyIncarcerated: 'yes' | 'no';
+  previousIncarcerationExplanation?: string | null;
+  paroleReviewDate?: string | null;
+  releaseDate?: string | null;
+  veteran: 'yes' | 'no';
+  substancesUseMisuse?: string | null;
+  dateOfLastUse?: string | null;
+  mentalEmotionalConcerns: 'yes' | 'no';
+  mentalEmotionalExplanation?: string | null;
+  pregnant: 'yes' | 'no';
+  dueDate?: string | null;
+  prenatalCare?: ('yes' | 'no') | null;
+  childrenCount?: number | null;
+  childrenLivingWhere?: string | null;
+  suicideThoughts?: ('yes' | 'no') | null;
+  suicideThoughtsWhen?: string | null;
+  currentMedications?: string | null;
+  physicalConditionsRequireMedication: 'yes' | 'no';
+  physicalConditionsDescription?: string | null;
+  receiveSsiSsd: 'yes' | 'no';
+  livedInTransitionalHousing: 'yes' | 'no';
+  transitionalHousingExplanation?: string | null;
+  pastTreatmentTypes?:
+    | (
+        | 'Individual Therapy'
+        | 'Group Therapy'
+        | 'Substance Abuse Treatment'
+        | 'In-Home Case Management'
+        | 'Intensive Outpatient'
+        | 'Inpatient Care'
+        | 'Residential Care'
+        | 'Hospitalizations'
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1189,6 +1261,10 @@ export interface PayloadLockedDocument {
         value: number | Event;
       } | null)
     | ({
+        relationTo: 'preApplications';
+        value: number | PreApplication;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1303,6 +1379,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        preApplicationFormBlock?: T | PreApplicationFormBlockSelect<T>;
       };
   meta?:
     | T
@@ -1513,6 +1590,19 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PreApplicationFormBlock_select".
+ */
+export interface PreApplicationFormBlockSelect<T extends boolean = true> {
+  heading?: T;
+  introText?: T;
+  successMessage?: T;
+  submitButtonText?: T;
+  notificationEmails?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1554,6 +1644,46 @@ export interface EventsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "preApplications_select".
+ */
+export interface PreApplicationsSelect<T extends boolean = true> {
+  notificationEmails?: T;
+  firstName?: T;
+  lastName?: T;
+  otherKnownNames?: T;
+  phoneNumber?: T;
+  dateOfBirth?: T;
+  email?: T;
+  currentlyIncarcerated?: T;
+  caseManager?: T;
+  previouslyIncarcerated?: T;
+  previousIncarcerationExplanation?: T;
+  paroleReviewDate?: T;
+  releaseDate?: T;
+  veteran?: T;
+  substancesUseMisuse?: T;
+  dateOfLastUse?: T;
+  mentalEmotionalConcerns?: T;
+  mentalEmotionalExplanation?: T;
+  pregnant?: T;
+  dueDate?: T;
+  prenatalCare?: T;
+  childrenCount?: T;
+  childrenLivingWhere?: T;
+  suicideThoughts?: T;
+  suicideThoughtsWhen?: T;
+  currentMedications?: T;
+  physicalConditionsRequireMedication?: T;
+  physicalConditionsDescription?: T;
+  receiveSsiSsd?: T;
+  livedInTransitionalHousing?: T;
+  transitionalHousingExplanation?: T;
+  pastTreatmentTypes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

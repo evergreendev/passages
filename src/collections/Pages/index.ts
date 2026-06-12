@@ -11,6 +11,7 @@ import { IntroText } from '../../blocks/IntroText/config'
 import { InvolvementCards } from '../../blocks/InvolvementCards/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { PassagesHero } from '../../blocks/PassagesHero/config'
+import { PreApplicationFormBlock } from '../../blocks/PreApplicationFormBlock/config'
 import { ProgramOverview } from '../../blocks/ProgramOverview/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
@@ -88,6 +89,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 MediaBlock,
                 Archive,
                 FormBlock,
+                PreApplicationFormBlock,
               ],
               required: true,
               admin: {
