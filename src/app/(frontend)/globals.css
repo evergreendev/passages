@@ -28,6 +28,11 @@
 @source inline("lg:col-span-6");
 @source inline("lg:col-span-8");
 @source inline("lg:col-span-12");
+@source inline("md:col-start-2");
+@source inline("lg:col-start-2");
+@source inline("lg:col-start-3");
+@source inline("lg:col-start-4");
+@source inline("lg:col-start-5");
 @source inline("border-border");
 @source inline("bg-card");
 @source inline("border-error");
