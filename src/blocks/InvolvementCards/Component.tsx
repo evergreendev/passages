@@ -21,7 +21,7 @@ export const InvolvementCardsBlock: React.FC<InvolvementCardsBlockProps> = ({ ca
   return (
     <section className="bg-[#dbecef] py-16 text-[#273f98]">
       <div className="container">
-        <h2 className="text-center font-serif text-4xl md:text-6xl">{heading}</h2>
+        <h2 className="text-center font-serif text-4xl md:text-4xl">{heading}</h2>
 
         {cards?.length ? (
           <div className="mx-auto mt-16 grid max-w-5xl gap-12 md:grid-cols-3">

@@ -22,7 +22,7 @@ export const ProgramOverviewBlock: React.FC<ProgramOverviewBlockProps> = ({
     <section className="bg-[#f3f7f8] py-16 text-[#1f3b95]">
       <div className="container">
         <div className="mx-auto max-w-3xl">
-          <h2 className="font-serif text-4xl leading-tight md:text-6xl">{heading}</h2>
+          <h2 className="font-serif text-4xl leading-tight md:text-4xl">{heading}</h2>
           <div className="mt-7 text-lg font-medium leading-snug">
             <RichText data={content} enableGutter={false} />
           </div>
