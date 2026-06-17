@@ -55,7 +55,7 @@ export const PassagesHeroBlock = async ({
   const event = await getUpcomingEvent()
 
   return (
-    <section className="relative min-h-[680px] overflow-hidden bg-[#d9e8eb] md:aspect-[1400/680] md:min-h-0">
+    <section className="relative min-h-[680px] overflow-hidden bg-[#d9e8eb] lg:aspect-[1400/680] lg:min-h-0">
       <Media
         fill
         imgClassName="object-cover object-center"
@@ -65,7 +65,7 @@ export const PassagesHeroBlock = async ({
       />
       <div className="absolute inset-0 bg-white/10" />
 
-      <div className="relative z-10 flex min-h-[680px] flex-col justify-end md:absolute md:inset-0 md:min-h-0">
+      <div className="relative z-10 flex min-h-[680px] flex-col justify-end lg:absolute lg:inset-0 lg:min-h-0">
         <div className="absolute left-8 top-4 md:left-16 md:top-6">
           {logo && typeof logo === 'object' ? (
             <Media
@@ -98,7 +98,7 @@ export const PassagesHeroBlock = async ({
 
         <div className="w-full bg-linear-to-r from-[#1f3b95]/90 from-0% via-[#1f3b95]/85 via-80% to-transparent to-100% py-8 pl-4 pr-[18vw] text-white md:w-2/3 md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
           <div className="max-w-4xl">
-            <h1 className="font-serif text-3xl leading-tight md:text-5xl">{headline}</h1>
+            <h1 className="font-serif text-3xl leading-tight md:text-4xl">{headline}</h1>
             {actions?.length ? (
               <div className="mt-8 flex flex-wrap gap-3">
                 {actions.map((action) => (
