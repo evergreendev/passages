@@ -15,7 +15,12 @@ const ctaLinkClasses = {
 const baseCtaLinkClassName =
   'inline-flex h-11 items-center justify-center rounded-md px-7 text-sm font-bold uppercase tracking-normal text-white no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-passages-cyan'
 
-export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
+type HeaderNavProps = {
+  data: HeaderType
+  showCTALinks?: boolean
+}
+
+export const HeaderNav: React.FC<HeaderNavProps> = ({ data, showCTALinks = true }) => {
   const navItems = data?.navItems || []
   const ctaLinks = data?.ctaLinks || []
 
@@ -35,7 +40,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           })}
         </div>
       )}
-      {ctaLinks.length > 0 && (
+      {showCTALinks && ctaLinks.length > 0 && (
         <div className="flex flex-wrap gap-3">
           {ctaLinks.map(({ id, link, style }, i) => {
             return (

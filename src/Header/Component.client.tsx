@@ -38,7 +38,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           </Link>
         )}
         <div className="flex flex-wrap items-center gap-4 md:ml-auto md:justify-end">
-          <HeaderNav data={data} />
+          <HeaderNav data={data} showCTALinks={!isHomePage} />
         </div>
       </div>
     </header>
