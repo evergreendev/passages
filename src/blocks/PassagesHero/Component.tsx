@@ -55,65 +55,81 @@ export const PassagesHeroBlock = async ({
   const event = await getUpcomingEvent()
 
   return (
-    <section className="relative min-h-[680px] overflow-hidden bg-[#d9e8eb] lg:aspect-[1400/680] lg:min-h-0">
+    <section className="relative min-h-[680px] bg-passages-mist 2xl:aspect-video w-full 2xl:min-h-0 2xl:max-h-screen">
       <Media
         fill
-        imgClassName="object-cover object-center"
+        imgClassName="object-cover object-[60%_center]"
         priority
         resource={backgroundImage}
         size="100vw"
       />
-      <div className="absolute inset-0 bg-white/10" />
+      <div className="absolute inset-0 bg-white/15" />
 
-      <div className="relative z-10 flex min-h-[680px] flex-col justify-end lg:absolute lg:inset-0 lg:min-h-0">
-        <div className="flex min-h-0 flex-1 items-start px-8 pb-6 pt-4 md:px-16 md:pt-6">
-          {logo && typeof logo === 'object' ? (
-            <Media
-              className="relative h-full max-h-full w-[min(280px,75vw)]"
-              fill
-              imgClassName="object-contain object-left-top"
-              pictureClassName="block h-full w-full"
-              resource={logo}
-              size="320px"
-            />
+      <div className="relative z-50 flex min-h-[680px] flex-col justify-end xl:absolute xl:inset-0 xl:min-h-0">
+        <div className="container flex min-h-0 flex-1 flex-col justify-between py-6 md:py-8">
+          <div className="grid grid-cols-4 gap-x-16 gap-y-8 2xl:grid-cols-12 -translate-y-20">
+            {logo && typeof logo === 'object' ? (
+              <div className="col-span-4 xl:col-span-5 xl:col-start-2">
+                <Media
+                  className="relative h-45 w-full max-w-84 md:h-60 xl:h-80"
+                  fill
+                  imgClassName="object-contain object-left-top"
+                  pictureClassName="block h-full w-full"
+                  resource={logo}
+                  size="340px"
+                />
+              </div>
+            ) : null}
+          </div>
+
+          {event ? (
+            <div className="grid grid-cols-4 gap-x-16 gap-y-8 2xl:grid-cols-12">
+              <div className="col-span-4 md:col-span-6 xl:col-span-7 2xl:col-start-1">
+                <div className="rounded-xl border-2 border-passages-blue/35 bg-white/55 px-6 py-5 text-center text-passages-blue shadow-sm backdrop-blur-[2px] md:px-8">
+                  <p className="text-3xl font-extrabold uppercase leading-none md:text-6xl">
+                    {event.title}
+                  </p>
+                  <p className="mt-2 text-xl font-normal leading-tight md:text-4xl">
+                    {formatEventDate(event.startDate)}
+                  </p>
+                  <Link
+                    className="mt-3 inline-block text-xl font-bold italic underline underline-offset-2 md:text-3xl"
+                    href={event.externalLink}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Reserve Your Seat!
+                  </Link>
+                </div>
+              </div>
+            </div>
           ) : null}
         </div>
 
-        {event ? (
-          <div className="w-full bg-white/55 py-5 pl-4 pr-8 text-[#273f98] backdrop-blur-[2px] md:w-[60%] md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
-            <p className="text-3xl font-extrabold uppercase leading-none md:text-4xl">
-              {event.title}
-            </p>
-            <p className="mt-1 text-xl font-bold md:text-2xl">{formatEventDate(event.startDate)}</p>
-            <Link
-              className="mt-3 inline-block text-xl font-medium italic underline md:ml-72 md:text-2xl"
-              href={event.externalLink}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Reserve your seat
-            </Link>
-          </div>
-        ) : null}
-
-        <div className="w-full bg-linear-to-r from-[#1f3b95]/90 from-0% via-[#1f3b95]/85 via-80% to-transparent to-100% py-8 pl-4 pr-[18vw] text-white md:w-2/3 md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))]">
-          <div className="max-w-4xl">
-            <h1 className="font-serif text-3xl leading-tight md:text-4xl">{headline}</h1>
-            {actions?.length ? (
-              <div className="mt-8 flex flex-wrap gap-3">
-                {actions.map((action) => (
-                  <CMSLink
-                    key={action.id}
-                    {...action.link}
-                    appearance="inline"
-                    className={cn(
-                      'inline-flex min-h-14 items-center justify-center rounded-md px-7 text-lg font-bold',
-                      actionClasses[action.style || 'green'],
-                    )}
-                  />
-                ))}
+        <div className="bg-passages-blue/90 py-8 text-white backdrop-blur-[1px] 2xl:w-[56%]">
+          <div className="container">
+            <div className="grid grid-cols-4 gap-x-16 gap-y-8 xl:grid-cols-12">
+              <div className="col-span-4 xl:col-span-12">
+                <h1 className="text-center font-serif text-4xl font-normal leading-tight md:text-5xl xl:text-6xl">
+                  {headline}
+                </h1>
+                {actions?.length ? (
+                  <div className="mt-8 flex flex-wrap gap-4 justify-center">
+                    {actions.map((action) => (
+                      <CMSLink
+                        key={action.id}
+                        {...action.link}
+                        appearance="inline"
+                        className={cn(
+                          'inline-flex min-h-10 xl:min-h-20 min-w-52 items-center justify-center rounded-md px-7 xl:text-3xl font-bold',
+                          actionClasses[action.style || 'green'],
+                        )}
+                      />
+                    ))}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            </div>
           </div>
         </div>
       </div>
