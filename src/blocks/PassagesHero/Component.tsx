@@ -65,11 +65,11 @@ export const PassagesHeroBlock = async ({
       />
       <div className="absolute inset-0 bg-white/15" />
 
-      <div className="relative z-50 flex min-h-[680px] flex-col justify-end 2xl:absolute 2xl:inset-0 2xl:min-h-0">
-        <div className="container flex min-h-0 flex-1 flex-col justify-between py-6 md:py-8">
-          <div className="grid grid-cols-4 gap-x-16 gap-y-8 2xl:grid-cols-12 md:-translate-y-20">
+      <div className="relative z-50 flex flex-col justify-end 2xl:absolute 2xl:inset-0 2xl:min-h-0">
+        <div className="flex min-h-0 flex-1 flex-col justify-between py-6 md:py-8">
+          <div className="grid grid-cols-4 gap-x-16 gap-y-0 2xl:grid-cols-12 md:-translate-y-20">
             {logo && typeof logo === 'object' ? (
-              <div className="col-span-4 xl:col-span-5 xl:col-start-2">
+              <div className="col-span-4 xl:col-span-5 xl:col-start-4">
                 <Media
                   className="relative h-45 w-full max-w-84 md:h-60 xl:h-80"
                   fill
@@ -84,7 +84,7 @@ export const PassagesHeroBlock = async ({
 
           {event ? (
             <div className="grid grid-cols-4 gap-x-16 gap-y-8 2xl:grid-cols-12">
-              <div className="col-span-4 md:col-span-6 xl:col-span-7 2xl:col-start-1">
+              <div className="col-span-4 md:col-span-6 xl:col-span-4 2xl:col-start-3">
                 <div className="rounded-xl border-2 border-passages-blue/35 bg-white/55 px-6 py-5 text-center text-passages-blue shadow-sm backdrop-blur-[2px] md:px-8">
                   <p className="text-3xl font-extrabold uppercase leading-none md:text-6xl">
                     {event.title}
