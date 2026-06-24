@@ -55,7 +55,7 @@ export const PassagesHeroBlock = async ({
   const event = await getUpcomingEvent()
 
   return (
-    <section className="relative min-h-[680px] bg-passages-mist 2xl:aspect-video w-full 2xl:min-h-0 2xl:max-h-[900px]">
+    <section className="relative min-h-[680px] bg-passages-mist 2xl:aspect-video w-full xl:min-h-[680px] 2xl:max-h-[900px]">
       <Media
         fill
         imgClassName="object-cover object-[60%_center]"
