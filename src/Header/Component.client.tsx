@@ -25,7 +25,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           <Link className="shrink-0" href="/">
             {logo && typeof logo === 'object' ? (
               <Media
-                imgClassName="h-auto max-h-20 w-[12.5rem] object-contain sm:w-[14.5rem]"
+                imgClassName="h-auto object-contain sm:w-[12rem]"
                 loading="eager"
                 pictureClassName="block"
                 priority
