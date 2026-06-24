@@ -65,9 +65,9 @@ export const PassagesHeroBlock = async ({
       />
       <div className="absolute inset-0 bg-white/15" />
 
-      <div className="relative z-50 flex min-h-[680px] flex-col justify-end xl:absolute xl:inset-0 xl:min-h-0">
+      <div className="relative z-50 flex min-h-[680px] flex-col justify-end 2xl:absolute 2xl:inset-0 2xl:min-h-0">
         <div className="container flex min-h-0 flex-1 flex-col justify-between py-6 md:py-8">
-          <div className="grid grid-cols-4 gap-x-16 gap-y-8 2xl:grid-cols-12 -translate-y-20">
+          <div className="grid grid-cols-4 gap-x-16 gap-y-8 2xl:grid-cols-12 md:-translate-y-20">
             {logo && typeof logo === 'object' ? (
               <div className="col-span-4 xl:col-span-5 xl:col-start-2">
                 <Media
