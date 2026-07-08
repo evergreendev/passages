@@ -17,7 +17,7 @@
   h5,
   h6 {
     font-family: var(--font-cormorant-garamond), Georgia, serif;
-    font-weight: unset;
+    font-weight: 700;
     font-size: unset;
   }
 }

@@ -83,34 +83,32 @@ export const PassagesHeroBlock = async ({
           </div>
 
           {event ? (
-            <div className="grid gap-x-16 gap-y-8 grid-cols-4 lg:grid-cols-12">
-              <div className="col-span-4 col-start-1 lg:col-span-5 lg:col-start-3">
-                <div className="rounded-xl border-2 border-passages-blue/35 bg-white/55 px-6 py-5 text-center text-passages-blue shadow-sm backdrop-blur-[2px] md:px-8">
-                  <p className="text-3xl font-extrabold uppercase leading-none md:text-6xl">
-                    {event.title}
-                  </p>
-                  <p className="mt-2 text-xl font-normal leading-tight md:text-4xl">
-                    {formatEventDate(event.startDate)}
-                  </p>
-                  <Link
-                    className="mt-3 inline-block text-xl font-bold italic underline underline-offset-2 md:text-3xl"
-                    href={event.externalLink}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Reserve Your Seat!
-                  </Link>
-                </div>
+            <div className="w-full lg:w-[56%]">
+              <div className="rounded-xl border-2 border-passages-blue/35 bg-white/55 px-6 py-5 text-center text-passages-blue shadow-sm backdrop-blur-[2px] md:px-8 lg:ml-auto lg:w-[88%] xl:w-[78%] 2xl:w-[72%]">
+                <p className="text-3xl font-extrabold uppercase leading-none md:text-5xl xl:text-6xl">
+                  {event.title}
+                </p>
+                <p className="mt-2 text-xl font-normal leading-tight md:text-3xl xl:text-4xl">
+                  {formatEventDate(event.startDate)}
+                </p>
+                <Link
+                  className="mt-3 inline-block text-xl font-bold italic underline underline-offset-2 md:text-2xl xl:text-3xl"
+                  href={event.externalLink}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Reserve Your Seat!
+                </Link>
               </div>
             </div>
           ) : null}
         </div>
 
-        <div className="bg-passages-blue/90 py-8 text-white backdrop-blur-[1px] 2xl:w-[56%]">
+        <div className="w-full bg-passages-blue/90 py-8 text-white backdrop-blur-[1px] lg:w-[56%]">
           <div className="container">
             <div className="grid grid-cols-4 gap-x-16 gap-y-8 xl:grid-cols-12">
               <div className="col-span-4 xl:col-span-12">
-                <h1 className="text-center font-serif text-4xl font-normal leading-tight md:text-5xl 2xl:text-5xl">
+                <h1 className="text-center font-serif text-4xl font-bold leading-tight md:text-4xl xl:text-5xl">
                   {headline}
                 </h1>
                 {actions?.length ? (

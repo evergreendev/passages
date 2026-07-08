@@ -1,4 +1,5 @@
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import Link from 'next/link'
 import React from 'react'
 
 import RichText from '@/components/RichText'
@@ -38,6 +39,12 @@ export async function Footer() {
             <div className="text-xl leading-tight md:text-2xl">
               <p className="mb-2 text-lg font-extrabold text-[#98c844] md:text-xl">Questions?</p>
               <p>{footerData?.phoneNumber}</p>
+              <Link
+                className="mt-4 inline-flex min-h-10 items-center justify-center rounded-md bg-[#98c844] px-6 text-base font-bold text-white transition-colors hover:bg-[#86b536]"
+                href="/contact-us"
+              >
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>

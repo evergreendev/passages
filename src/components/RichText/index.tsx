@@ -71,7 +71,8 @@ export default function RichText(props: Props) {
         {
           container: enableGutter,
           'max-w-none': !enableGutter,
-          'mx-auto prose md:prose-md': enableProse,
+          'mx-auto prose [--tw-prose-body:#203898] [--tw-prose-headings:#203898] [--tw-prose-lead:#203898] [--tw-prose-links:#203898] [--tw-prose-bold:#203898] [--tw-prose-counters:#203898] [--tw-prose-bullets:#203898] [--tw-prose-hr:#203898] [--tw-prose-quotes:#203898] [--tw-prose-quote-borders:#203898] [--tw-prose-captions:#203898] [--tw-prose-code:#203898] prose-headings:text-passages-blue prose-p:text-passages-blue prose-strong:text-passages-blue prose-a:text-passages-blue prose-li:text-passages-blue md:prose-md':
+            enableProse,
         },
         className,
       )}

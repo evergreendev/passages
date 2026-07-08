@@ -13,7 +13,6 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { PassagesHero } from '../../blocks/PassagesHero/config'
 import { PreApplicationFormBlock } from '../../blocks/PreApplicationFormBlock/config'
 import { ProgramOverview } from '../../blocks/ProgramOverview/config'
-import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
@@ -69,10 +68,6 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       type: 'tabs',
       tabs: [
-        {
-          fields: [hero],
-          label: 'Hero',
-        },
         {
           fields: [
             {
