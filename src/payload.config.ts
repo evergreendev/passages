@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -57,6 +58,18 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
+    },
+  }),
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'noreply@example.com',
+    defaultFromName: process.env.SMTP_FROM_NAME || 'Evergreen Media',
+    transportOptions: {
+      host: process.env.SMTP_HOST || 'smtp.mandrillapp.com',
+      port: Number(process.env.SMTP_PORT || 587),
+      auth: {
+        user: process.env.SMTP_USER || 'Evergreen Media',
+        pass: process.env.SMTP_PASS || process.env.MANDRILL_KEY,
+      },
     },
   }),
   collections: [Pages, Posts, Events, PreApplications, Media, Categories, Users],
