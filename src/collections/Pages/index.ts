@@ -6,6 +6,7 @@ import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { ContactBand } from '../../blocks/ContactBand/config'
 import { Content } from '../../blocks/Content/config'
+import { DonationBlock } from '../../blocks/DonationBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { IntroText } from '../../blocks/IntroText/config'
 import { InvolvementCards } from '../../blocks/InvolvementCards/config'
@@ -81,6 +82,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 ContactBand,
                 CallToAction,
                 Content,
+                DonationBlock,
                 MediaBlock,
                 Archive,
                 FormBlock,

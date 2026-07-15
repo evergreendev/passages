@@ -172,6 +172,7 @@ export interface Page {
     | ContactBandBlock
     | CallToActionBlock
     | ContentBlock
+    | DonationBlock
     | MediaBlock
     | ArchiveBlock
     | FormBlock
@@ -673,6 +674,26 @@ export interface ContentBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationBlock".
+ */
+export interface DonationBlock {
+  heading: string;
+  description?: string | null;
+  /**
+   * Stored on the Stripe PaymentIntent metadata for donation routing or notifications.
+   */
+  donationEmail: string;
+  presetAmounts: {
+    amount: number;
+    id?: string | null;
+  }[];
+  buttonLabel: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'donationBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1311,6 +1332,7 @@ export interface PagesSelect<T extends boolean = true> {
         contactBand?: T | ContactBandBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
+        donationBlock?: T | DonationBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
@@ -1486,6 +1508,24 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationBlock_select".
+ */
+export interface DonationBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  donationEmail?: T;
+  presetAmounts?:
+    | T
+    | {
+        amount?: T;
+        id?: T;
+      };
+  buttonLabel?: T;
   id?: T;
   blockName?: T;
 }

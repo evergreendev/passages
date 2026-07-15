@@ -6,6 +6,7 @@ import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContactBandBlock } from '@/blocks/ContactBand/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { DonationBlock } from '@/blocks/DonationBlock/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { IntroTextBlock } from '@/blocks/IntroText/Component'
 import { InvolvementCardsBlock } from '@/blocks/InvolvementCards/Component'
@@ -18,6 +19,7 @@ const blockComponents = {
   archive: ArchiveBlock,
   contactBand: ContactBandBlock,
   content: ContentBlock,
+  donationBlock: DonationBlock,
   cta: CallToActionBlock,
   formBlock: FormBlock,
   introText: IntroTextBlock,
