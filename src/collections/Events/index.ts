@@ -4,6 +4,10 @@ import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { revalidateEventAfterChange, revalidateEventAfterDelete } from './hooks/revalidateEvent'
 
+type EventLinkSiblingData = {
+  linkType?: 'external' | 'internal'
+}
+
 export const Events: CollectionConfig<'events'> = {
   slug: 'events',
   access: {
@@ -19,8 +23,11 @@ export const Events: CollectionConfig<'events'> = {
   },
   defaultPopulate: {
     title: true,
+    content: true,
     startDate: true,
+    linkType: true,
     externalLink: true,
+    internalPage: true,
   },
   fields: [
     {
@@ -44,10 +51,48 @@ export const Events: CollectionConfig<'events'> = {
       required: true,
     },
     {
+      name: 'linkType',
+      type: 'radio',
+      admin: {
+        layout: 'horizontal',
+      },
+      defaultValue: 'external',
+      options: [
+        {
+          label: 'External link',
+          value: 'external',
+        },
+        {
+          label: 'Internal page',
+          value: 'internal',
+        },
+      ],
+      required: true,
+    },
+    {
       name: 'externalLink',
       type: 'text',
       label: 'External link',
-      required: true,
+      admin: {
+        condition: (_data, siblingData) => siblingData?.linkType !== 'internal',
+      },
+      validate: (value: unknown, { siblingData }: { siblingData: EventLinkSiblingData }) => {
+        if (siblingData?.linkType === 'internal') return true
+        return value ? true : 'External link is required.'
+      },
+    },
+    {
+      name: 'internalPage',
+      type: 'relationship',
+      admin: {
+        condition: (_data, siblingData) => siblingData?.linkType === 'internal',
+      },
+      label: 'Internal page',
+      relationTo: 'pages',
+      validate: (value: unknown, { siblingData }: { siblingData: EventLinkSiblingData }) => {
+        if (siblingData?.linkType !== 'internal') return true
+        return value ? true : 'Internal page is required.'
+      },
     },
   ],
   hooks: {

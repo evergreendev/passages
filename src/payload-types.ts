@@ -998,7 +998,9 @@ export interface Event {
     [k: string]: unknown;
   } | null;
   startDate: string;
-  externalLink: string;
+  linkType: 'external' | 'internal';
+  externalLink?: string | null;
+  internalPage?: (number | null) | Page;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1641,7 +1643,9 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   startDate?: T;
+  linkType?: T;
   externalLink?: T;
+  internalPage?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
