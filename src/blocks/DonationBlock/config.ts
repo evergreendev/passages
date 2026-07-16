@@ -32,6 +32,38 @@ const defaultThankYouMessage = {
   },
 }
 
+const defaultDescription = {
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: 'normal',
+            style: '',
+            text: 'Your gift helps support women building stable, independent futures.',
+            type: 'text',
+            version: 1,
+          },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+        textFormat: 0,
+        textStyle: '',
+      },
+    ],
+    direction: 'ltr',
+    format: '',
+    indent: 0,
+    type: 'root',
+    version: 1,
+  },
+}
+
 export const DonationBlock: Block = {
   slug: 'donationBlock',
   interfaceName: 'DonationBlock',
@@ -48,8 +80,8 @@ export const DonationBlock: Block = {
     },
     {
       name: 'description',
-      type: 'textarea',
-      defaultValue: 'Your gift helps support women building stable, independent futures.',
+      type: 'richText',
+      defaultValue: defaultDescription,
     },
     {
       name: 'donationEmail',

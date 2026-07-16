@@ -317,9 +317,11 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
             </div>
             <h2 className="font-serif text-4xl leading-none md:text-5xl">{heading}</h2>
             {description ? (
-              <p className="mt-5 max-w-xl text-lg font-medium leading-snug text-passages-slate">
-                {description}
-              </p>
+              <RichText
+                className="mt-5 max-w-xl prose-p:text-lg prose-p:font-medium prose-p:leading-snug prose-p:text-passages-slate prose-strong:text-passages-slate"
+                data={description}
+                enableGutter={false}
+              />
             ) : null}
           </div>
 
