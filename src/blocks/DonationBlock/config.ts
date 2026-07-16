@@ -1,5 +1,11 @@
 import type { Block } from 'payload'
 
+import {
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
+
 const defaultThankYouMessage = {
   root: {
     children: [
@@ -82,6 +88,11 @@ export const DonationBlock: Block = {
       name: 'description',
       type: 'richText',
       defaultValue: defaultDescription,
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
     },
     {
       name: 'donationEmail',
@@ -96,6 +107,11 @@ export const DonationBlock: Block = {
       name: 'thankYouMessage',
       type: 'richText',
       defaultValue: defaultThankYouMessage,
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
       label: 'Thank You Message',
       required: true,
     },

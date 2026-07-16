@@ -2,6 +2,11 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
+import {
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 import { revalidateEventAfterChange, revalidateEventAfterDelete } from './hooks/revalidateEvent'
 
 type EventLinkSiblingData = {
@@ -38,6 +43,11 @@ export const Events: CollectionConfig<'events'> = {
     {
       name: 'content',
       type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
     },
     {
       name: 'startDate',
