@@ -681,11 +681,44 @@ export interface ContentBlock {
  */
 export interface DonationBlock {
   heading: string;
-  description?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Stored on the Stripe PaymentIntent metadata for donation routing or notifications.
    */
   donationEmail: string;
+  thankYouMessage: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  supportOptions: {
+    label: string;
+    id?: string | null;
+  }[];
   presetAmounts: {
     amount: number;
     id?: string | null;
@@ -979,7 +1012,9 @@ export interface Event {
     [k: string]: unknown;
   } | null;
   startDate: string;
-  externalLink: string;
+  linkType: 'external' | 'internal';
+  externalLink?: string | null;
+  internalPage?: (number | null) | Page;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1519,6 +1554,13 @@ export interface DonationBlockSelect<T extends boolean = true> {
   heading?: T;
   description?: T;
   donationEmail?: T;
+  thankYouMessage?: T;
+  supportOptions?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
   presetAmounts?:
     | T
     | {
@@ -1615,7 +1657,9 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   content?: T;
   startDate?: T;
+  linkType?: T;
   externalLink?: T;
+  internalPage?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

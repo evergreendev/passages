@@ -1,5 +1,75 @@
 import type { Block } from 'payload'
 
+import {
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
+
+const defaultThankYouMessage = {
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: 'normal',
+            style: '',
+            text: 'Thank you. Your donation was received.',
+            type: 'text',
+            version: 1,
+          },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+        textFormat: 0,
+        textStyle: '',
+      },
+    ],
+    direction: 'ltr',
+    format: '',
+    indent: 0,
+    type: 'root',
+    version: 1,
+  },
+}
+
+const defaultDescription = {
+  root: {
+    children: [
+      {
+        children: [
+          {
+            detail: 0,
+            format: 0,
+            mode: 'normal',
+            style: '',
+            text: 'Your gift helps support women building stable, independent futures.',
+            type: 'text',
+            version: 1,
+          },
+        ],
+        direction: 'ltr',
+        format: '',
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+        textFormat: 0,
+        textStyle: '',
+      },
+    ],
+    direction: 'ltr',
+    format: '',
+    indent: 0,
+    type: 'root',
+    version: 1,
+  },
+}
+
 export const DonationBlock: Block = {
   slug: 'donationBlock',
   interfaceName: 'DonationBlock',
@@ -16,8 +86,13 @@ export const DonationBlock: Block = {
     },
     {
       name: 'description',
-      type: 'textarea',
-      defaultValue: 'Your gift helps support women building stable, independent futures.',
+      type: 'richText',
+      defaultValue: defaultDescription,
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
     },
     {
       name: 'donationEmail',
@@ -26,6 +101,36 @@ export const DonationBlock: Block = {
         description:
           'Stored on the Stripe PaymentIntent metadata for donation routing or notifications.',
       },
+      required: true,
+    },
+    {
+      name: 'thankYouMessage',
+      type: 'richText',
+      defaultValue: defaultThankYouMessage,
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        },
+      }),
+      label: 'Thank You Message',
+      required: true,
+    },
+    {
+      name: 'supportOptions',
+      type: 'array',
+      defaultValue: [{ label: 'General support' }],
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+      ],
+      labels: {
+        singular: 'Support Option',
+        plural: 'Support Options',
+      },
+      minRows: 1,
       required: true,
     },
     {

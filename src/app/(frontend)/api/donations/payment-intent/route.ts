@@ -14,6 +14,8 @@ type PaymentIntentRequest = {
   donationEmail?: unknown
   donorEmail?: unknown
   name?: unknown
+  remembranceMessage?: unknown
+  supportDesignation?: unknown
 }
 
 const append = (params: URLSearchParams, key: string, value: string | number) => {
@@ -48,6 +50,10 @@ export async function POST(request: Request) {
   const donorEmail = typeof body.donorEmail === 'string' ? body.donorEmail.trim() : ''
   const donationEmail = typeof body.donationEmail === 'string' ? body.donationEmail.trim() : ''
   const name = typeof body.name === 'string' && body.name.trim() ? body.name.trim() : 'Donation'
+  const remembranceMessage =
+    typeof body.remembranceMessage === 'string' ? body.remembranceMessage.trim() : ''
+  const supportDesignation =
+    typeof body.supportDesignation === 'string' ? body.supportDesignation.trim() : ''
 
   if (!Number.isInteger(amountCents)) {
     return Response.json(
@@ -78,6 +84,17 @@ export async function POST(request: Request) {
     )
   }
 
+  if (!supportDesignation) {
+    return Response.json(
+      { error: 'Choose what you would like your donation to support.' },
+      { status: 400 },
+    )
+  }
+
+  if (supportDesignation.length > 500 || remembranceMessage.length > 500) {
+    return Response.json({ error: 'Additional donation information is too long.' }, { status: 400 })
+  }
+
   const params = new URLSearchParams()
 
   append(params, 'amount', amountCents)
@@ -87,6 +104,8 @@ export async function POST(request: Request) {
   append(params, 'payment_method_types[]', 'card')
   append(params, 'metadata[donor_email]', donorEmail)
   append(params, 'metadata[donation_email]', donationEmail)
+  append(params, 'metadata[remembrance_message]', remembranceMessage)
+  append(params, 'metadata[support_designation]', supportDesignation)
 
   const stripeResponse = await fetch(stripePaymentIntentsURL, {
     body: params,

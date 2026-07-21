@@ -5,9 +5,18 @@ import type { DonationBlock as DonationBlockProps } from '@/payload-types'
 import { CreditCard, HeartHandshake } from 'lucide-react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 
+import RichText from '@/components/RichText'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/utilities/ui'
 
 type StripeCardElement = {
@@ -95,6 +104,8 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
   donationEmail,
   heading,
   presetAmounts,
+  supportOptions,
+  thankYouMessage,
 }) => {
   const cardElementRef = useRef<StripeCardElement | null>(null)
   const stripeRef = useRef<StripeInstance | null>(null)
@@ -107,12 +118,21 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
         .filter((amount) => Number.isFinite(amount) && amount > 0),
     [presetAmounts],
   )
+  const supportOptionLabels = useMemo(() => {
+    const labels = (supportOptions || [])
+      .map((item) => item.label?.trim())
+      .filter((label): label is string => Boolean(label))
+
+    return labels.length > 0 ? labels : ['General support']
+  }, [supportOptions])
 
   const [selectedAmount, setSelectedAmount] = useState<number | 'custom'>(amounts[0] || 25)
   const [customAmount, setCustomAmount] = useState('')
   const [email, setEmail] = useState('')
+  const [remembranceMessage, setRemembranceMessage] = useState('')
+  const [supportDesignation, setSupportDesignation] = useState('')
   const [error, setError] = useState<string | undefined>()
-  const [success, setSuccess] = useState<string | undefined>()
+  const [hasSubmitted, setHasSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const activeAmount =
@@ -188,7 +208,6 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError(undefined)
-    setSuccess(undefined)
 
     if (!Number.isFinite(activeAmount) || activeAmount < 1) {
       setError('Enter a donation amount of at least $1.')
@@ -197,6 +216,11 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
 
     if (!email.trim()) {
       setError('Enter an email address for your receipt.')
+      return
+    }
+
+    if (!supportDesignation) {
+      setError('Choose what you would like your donation to support.')
       return
     }
 
@@ -214,6 +238,8 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
           donorEmail: email,
           donationEmail,
           name: heading,
+          remembranceMessage,
+          supportDesignation,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -224,7 +250,7 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
       const data = (await response.json()) as {
         clientSecret?: string
         error?: string
-        stripeMode?: string
+        paymentIntentID?: string
       }
 
       if (!response.ok || !data.clientSecret) {
@@ -256,12 +282,41 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
         return
       }
 
-      if (result.paymentIntent?.status === 'succeeded') {
-        setSuccess('Thank you. Your donation was received.')
+      if (
+        result.paymentIntent?.status === 'succeeded' ||
+        result.paymentIntent?.status === 'processing'
+      ) {
+        if (data.paymentIntentID) {
+          try {
+            const notificationResponse = await fetch('/api/donations/notification', {
+              body: JSON.stringify({
+                paymentIntentID: data.paymentIntentID,
+              }),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+            })
+
+            if (!notificationResponse.ok) {
+              console.warn('Donation notification email was not sent.')
+            }
+          } catch (notificationError) {
+            console.warn(notificationError)
+          }
+        }
+
+        cardElementRef.current?.unmount()
+        cardElementRef.current = null
+        setHasSubmitted(true)
         setEmail('')
         setCustomAmount('')
+        setRemembranceMessage('')
+        setSupportDesignation('')
       } else {
-        setSuccess('Thank you. Stripe is processing your donation.')
+        cardElementRef.current?.unmount()
+        cardElementRef.current = null
+        setHasSubmitted(true)
       }
     } catch (err) {
       console.warn(err)
@@ -281,113 +336,164 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
             </div>
             <h2 className="font-serif text-4xl leading-none md:text-5xl">{heading}</h2>
             {description ? (
-              <p className="mt-5 max-w-xl text-lg font-medium leading-snug text-passages-slate">
-                {description}
-              </p>
+              <RichText
+                className="mt-5 max-w-xl prose-p:text-lg prose-p:font-medium prose-p:leading-snug prose-p:text-passages-slate prose-strong:text-passages-slate"
+                data={description}
+                enableGutter={false}
+              />
             ) : null}
           </div>
 
-          <form
-            className="rounded-md border border-border bg-white p-5 shadow-sm md:p-7"
-            onSubmit={handleSubmit}
-          >
-            <fieldset disabled={isSubmitting}>
-              <legend className="mb-4 text-lg font-extrabold text-passages-blue">
-                Choose an amount
-              </legend>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {amounts.map((amount, index) => (
+          {hasSubmitted ? (
+            <div className="rounded-md border border-border bg-white p-5 shadow-sm md:p-7">
+              {thankYouMessage ? (
+                <RichText data={thankYouMessage} enableGutter={false} />
+              ) : (
+                <p className="text-lg font-medium text-passages-blue">
+                  Thank you. Your donation was received.
+                </p>
+              )}
+            </div>
+          ) : (
+            <form
+              className="rounded-md border border-border bg-white p-5 shadow-sm md:p-7"
+              onSubmit={handleSubmit}
+            >
+              <fieldset disabled={isSubmitting}>
+                <legend className="mb-4 text-lg font-extrabold text-passages-blue">
+                  Choose an amount
+                </legend>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {amounts.map((amount, index) => (
+                    <button
+                      className={cn(
+                        'min-h-12 rounded-md border px-3 text-lg font-extrabold transition-colors',
+                        selectedAmount === amount
+                          ? 'border-passages-blue bg-passages-blue text-white'
+                          : 'border-border bg-white text-passages-blue hover:border-passages-cyan',
+                      )}
+                      key={`${amount}-${index}`}
+                      onClick={() => setSelectedAmount(amount)}
+                      type="button"
+                    >
+                      ${amount}
+                    </button>
+                  ))}
                   <button
                     className={cn(
                       'min-h-12 rounded-md border px-3 text-lg font-extrabold transition-colors',
-                      selectedAmount === amount
+                      selectedAmount === 'custom'
                         ? 'border-passages-blue bg-passages-blue text-white'
                         : 'border-border bg-white text-passages-blue hover:border-passages-cyan',
                     )}
-                    key={`${amount}-${index}`}
-                    onClick={() => setSelectedAmount(amount)}
+                    onClick={() => setSelectedAmount('custom')}
                     type="button"
                   >
-                    ${amount}
+                    Custom
                   </button>
-                ))}
-                <button
-                  className={cn(
-                    'min-h-12 rounded-md border px-3 text-lg font-extrabold transition-colors',
-                    selectedAmount === 'custom'
-                      ? 'border-passages-blue bg-passages-blue text-white'
-                      : 'border-border bg-white text-passages-blue hover:border-passages-cyan',
-                  )}
-                  onClick={() => setSelectedAmount('custom')}
-                  type="button"
-                >
-                  Custom
-                </button>
-              </div>
+                </div>
 
-              {selectedAmount === 'custom' ? (
+                {selectedAmount === 'custom' ? (
+                  <div className="mt-5">
+                    <Label htmlFor="donation-custom-amount">Donation amount</Label>
+                    <div className="mt-2 flex items-center rounded-md border border-input bg-white focus-within:ring-4 focus-within:ring-ring/10 focus-within:outline-1 focus-within:outline-ring/50">
+                      <span className="px-3 text-lg font-bold text-passages-slate">$</span>
+                      <Input
+                        className="h-12 border-0 px-0 text-lg font-bold shadow-none focus-visible:ring-0 focus-visible:outline-none"
+                        id="donation-custom-amount"
+                        inputMode="decimal"
+                        min="1"
+                        onChange={(event) => setCustomAmount(event.target.value)}
+                        placeholder="100"
+                        step="0.01"
+                        type="number"
+                        value={customAmount}
+                      />
+                    </div>
+                  </div>
+                ) : null}
+
                 <div className="mt-5">
-                  <Label htmlFor="donation-custom-amount">Donation amount</Label>
-                  <div className="mt-2 flex items-center rounded-md border border-input bg-white focus-within:ring-4 focus-within:ring-ring/10 focus-within:outline-1 focus-within:outline-ring/50">
-                    <span className="px-3 text-lg font-bold text-passages-slate">$</span>
-                    <Input
-                      className="h-12 border-0 px-0 text-lg font-bold shadow-none focus-visible:ring-0 focus-visible:outline-none"
-                      id="donation-custom-amount"
-                      inputMode="decimal"
-                      min="1"
-                      onChange={(event) => setCustomAmount(event.target.value)}
-                      placeholder="100"
-                      step="0.01"
-                      type="number"
-                      value={customAmount}
+                  <Label htmlFor="donation-email">
+                    Email (You'll receive receipts and notifications at this email)
+                  </Label>
+                  <Input
+                    className="mt-2 h-12 text-base"
+                    id="donation-email"
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="you@example.com"
+                    required
+                    type="email"
+                    value={email}
+                  />
+                </div>
+
+                <div className="mt-6 border-t border-border pt-5">
+                  <h3 className="text-lg font-extrabold text-passages-blue">
+                    Additional Information
+                  </h3>
+
+                  <div className="mt-4">
+                    <Label htmlFor="donation-support">
+                      I would like my donation to support:
+                      <span aria-hidden> *</span>
+                    </Label>
+                    <Select
+                      disabled={isSubmitting}
+                      onValueChange={setSupportDesignation}
+                      required
+                      value={supportDesignation}
+                    >
+                      <SelectTrigger className="mt-2 h-12 text-base" id="donation-support">
+                        <SelectValue placeholder="Choose an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {supportOptionLabels.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="mt-5">
+                    <Label htmlFor="donation-remembrance">In Remembrance of:</Label>
+                    <Textarea
+                      className="mt-2 min-h-28 text-base"
+                      id="donation-remembrance"
+                      maxLength={500}
+                      onChange={(event) => setRemembranceMessage(event.target.value)}
+                      value={remembranceMessage}
                     />
                   </div>
                 </div>
-              ) : null}
 
-              <div className="mt-5">
-                <Label htmlFor="donation-email">Email for receipt</Label>
-                <Input
-                  className="mt-2 h-12 text-base"
-                  id="donation-email"
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@example.com"
-                  required
-                  type="email"
-                  value={email}
-                />
-              </div>
+                <div className="mt-5">
+                  <Label>Card details</Label>
+                  <div
+                    className="mt-2 min-h-12 rounded-md border border-input bg-white px-3 py-3 shadow-xs"
+                    id="donation-card-element"
+                  />
+                </div>
 
-              <div className="mt-5">
-                <Label>Card details</Label>
-                <div
-                  className="mt-2 min-h-12 rounded-md border border-input bg-white px-3 py-3 shadow-xs"
-                  id="donation-card-element"
-                />
-              </div>
+                {error ? (
+                  <p className="mt-4 rounded-md border border-error bg-error/10 px-3 py-2 text-sm font-medium text-error">
+                    {error}
+                  </p>
+                ) : null}
 
-              {error ? (
-                <p className="mt-4 rounded-md border border-error bg-error/10 px-3 py-2 text-sm font-medium text-error">
-                  {error}
-                </p>
-              ) : null}
-
-              {success ? (
-                <p className="mt-4 rounded-md border border-success bg-success/10 px-3 py-2 text-sm font-medium text-passages-forest">
-                  {success}
-                </p>
-              ) : null}
-
-              <Button
-                className="mt-6 h-12 w-full bg-passages-green text-base font-extrabold text-white hover:bg-passages-green-deep"
-                disabled={isSubmitting || !cardReady}
-                type="submit"
-              >
-                <CreditCard aria-hidden className="size-5" />
-                {isSubmitting ? 'Processing...' : buttonLabel}
-              </Button>
-            </fieldset>
-          </form>
+                <Button
+                  className="mt-6 h-12 w-full bg-passages-green text-base font-extrabold text-white hover:bg-passages-green-deep"
+                  disabled={isSubmitting || !cardReady}
+                  type="submit"
+                >
+                  <CreditCard aria-hidden className="size-5" />
+                  {isSubmitting ? 'Processing...' : buttonLabel}
+                </Button>
+              </fieldset>
+            </form>
+          )}
         </div>
       </div>
     </section>

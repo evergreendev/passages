@@ -2,8 +2,10 @@ import type { PassagesHeroBlock as PassagesHeroBlockProps } from '@/payload-type
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
+import RichText from '@/components/RichText'
 import { cn } from '@/utilities/ui'
 import configPromise from '@payload-config'
+import type { DefaultTypedEditorState } from '@payloadcms/richtext-lexical'
 import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import { getPayload } from 'payload'
@@ -30,7 +32,7 @@ const getUpcomingEvent = async () => {
 
   const result = await payload.find({
     collection: 'events',
-    depth: 0,
+    depth: 1,
     draft,
     limit: 1,
     overrideAccess: draft,
@@ -46,6 +48,22 @@ const getUpcomingEvent = async () => {
   return result.docs[0] || null
 }
 
+type HeroEventLink = {
+  externalLink?: null | string
+  internalPage?: null | number | string | { slug?: null | string }
+  linkType?: null | 'external' | 'internal'
+}
+
+const getEventHref = (event: HeroEventLink) => {
+  if (event.linkType === 'internal') {
+    return typeof event.internalPage === 'object' && event.internalPage?.slug
+      ? `/${event.internalPage.slug}`
+      : undefined
+  }
+
+  return event.externalLink || undefined
+}
+
 export const PassagesHeroBlock = async ({
   actions,
   backgroundImage,
@@ -53,6 +71,9 @@ export const PassagesHeroBlock = async ({
   logo,
 }: PassagesHeroBlockProps) => {
   const event = await getUpcomingEvent()
+  const eventContent = event?.content as DefaultTypedEditorState | null | undefined
+  const eventHref = event ? getEventHref(event) : undefined
+  const eventNewTab = event?.linkType !== 'internal'
 
   return (
     <section className="relative min-h-[680px] bg-passages-mist 2xl:aspect-video w-full xl:min-h-[680px] 2xl:max-h-[900px]">
@@ -91,14 +112,24 @@ export const PassagesHeroBlock = async ({
                 <p className="mt-2 text-xl font-normal leading-tight md:text-3xl xl:text-4xl">
                   {formatEventDate(event.startDate)}
                 </p>
-                <Link
-                  className="mt-3 inline-block text-xl font-bold italic underline underline-offset-2 md:text-2xl xl:text-3xl"
-                  href={event.externalLink}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Reserve Your Seat!
-                </Link>
+                {eventContent ? (
+                  <RichText
+                    className="mt-4 text-left prose-p:text-lg prose-p:font-medium prose-p:leading-snug prose-p:text-passages-blue md:prose-p:text-xl"
+                    data={eventContent}
+                    enableGutter={false}
+                    enableProse
+                  />
+                ) : null}
+                {eventHref ? (
+                  <Link
+                    className="mt-3 inline-block text-xl font-bold italic underline underline-offset-2 md:text-2xl xl:text-3xl"
+                    href={eventHref}
+                    rel={eventNewTab ? 'noopener noreferrer' : undefined}
+                    target={eventNewTab ? '_blank' : undefined}
+                  >
+                    Reserve Your Seat!
+                  </Link>
+                ) : null}
               </div>
             </div>
           ) : null}

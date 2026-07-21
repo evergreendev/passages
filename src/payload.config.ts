@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import sharp from 'sharp'
@@ -22,10 +24,12 @@ import { getServerSideURL } from './utilities/getURL'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const smtpPassword =
+  process.env.SMTP_PASS || process.env.MANDRILL_KEY || process.env.MANDRILL_API_KEY
+
 export default buildConfig({
   admin: {
-    components: {
-    },
+    components: {},
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -67,8 +71,8 @@ export default buildConfig({
       host: process.env.SMTP_HOST || 'smtp.mandrillapp.com',
       port: Number(process.env.SMTP_PORT || 587),
       auth: {
-        user: process.env.SMTP_USER || 'Evergreen Media',
-        pass: process.env.SMTP_PASS || process.env.MANDRILL_KEY,
+        user: process.env.SMTP_USER,
+        pass: smtpPassword,
       },
     },
   }),
