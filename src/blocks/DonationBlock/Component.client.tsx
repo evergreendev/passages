@@ -54,6 +54,12 @@ const stripeScriptID = 'stripe-js-v3'
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 
 const dollarsToCents = (value: number) => Math.round(value * 100)
+const getStripeKeyMode = (key: string | undefined) => {
+  if (key?.startsWith('pk_test_')) return 'test'
+  if (key?.startsWith('pk_live_')) return 'live'
+
+  return undefined
+}
 
 const loadStripeScript = () =>
   new Promise<void>((resolve, reject) => {
@@ -118,6 +124,11 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
     const setupStripe = async () => {
       if (!stripePublishableKey) {
         setError('Stripe publishable key is not configured.')
+        return
+      }
+
+      if (!getStripeKeyMode(stripePublishableKey)) {
+        setError('Stripe publishable key is not configured correctly.')
         return
       }
 
@@ -210,10 +221,22 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
         method: 'POST',
       })
 
-      const data = (await response.json()) as { clientSecret?: string; error?: string }
+      const data = (await response.json()) as {
+        clientSecret?: string
+        error?: string
+        stripeMode?: string
+      }
 
       if (!response.ok || !data.clientSecret) {
         setError(data.error || 'Unable to start payment. Please try again.')
+        setIsSubmitting(false)
+        return
+      }
+
+      const publishableKeyMode = getStripeKeyMode(stripePublishableKey)
+
+      if (data.stripeMode && publishableKeyMode && data.stripeMode !== publishableKeyMode) {
+        setError('Stripe keys are mismatched. Use test keys together or live keys together.')
         setIsSubmitting(false)
         return
       }

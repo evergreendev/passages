@@ -2,6 +2,12 @@ const stripePaymentIntentsURL = 'https://api.stripe.com/v1/payment_intents'
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const minimumAmountCents = 100
 const maximumAmountCents = 10000000
+const getStripeKeyMode = (key: string) => {
+  if (key.startsWith('sk_test_')) return 'test'
+  if (key.startsWith('sk_live_')) return 'live'
+
+  return undefined
+}
 
 type PaymentIntentRequest = {
   amountCents?: unknown
@@ -19,6 +25,15 @@ export async function POST(request: Request) {
 
   if (!stripeSecretKey) {
     return Response.json({ error: 'Stripe is not configured.' }, { status: 500 })
+  }
+
+  const stripeMode = getStripeKeyMode(stripeSecretKey)
+
+  if (!stripeMode) {
+    return Response.json(
+      { error: 'Stripe secret key is not configured correctly.' },
+      { status: 500 },
+    )
   }
 
   let body: PaymentIntentRequest
@@ -98,5 +113,6 @@ export async function POST(request: Request) {
   return Response.json({
     clientSecret: stripeData.client_secret,
     paymentIntentID: stripeData.id,
+    stripeMode,
   })
 }
