@@ -251,6 +251,7 @@ export const DonationForm: React.FC<DonationBlockProps> = ({
         clientSecret?: string
         error?: string
         paymentIntentID?: string
+        stripeMode?: string
       }
 
       if (!response.ok || !data.clientSecret) {
