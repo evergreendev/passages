@@ -7,7 +7,7 @@ const defaultOpenGraph: Metadata['openGraph'] = {
     "Passages Women's Transitional Living helps women move toward stability, purpose, and independence.",
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: `${getServerSideURL()}/website-cover.webp`,
     },
   ],
   siteName: 'Passages',
