@@ -37,6 +37,12 @@ const formatValue = (value: number | string | null | undefined) => {
   return String(value)
 }
 
+const formatDateOnly = (value: string | null | undefined) => {
+  if (!value) return value
+
+  return value.split('T')[0]
+}
+
 const escapeHTML = (value: number | string | null | undefined) =>
   formatValue(value)
     .replaceAll('&', '&amp;')
@@ -60,20 +66,20 @@ const buildRows = (doc: PreApplicationEmailDoc) => [
   ['Other known names', doc.otherKnownNames],
   ['Email', doc.email],
   ['Phone', doc.phoneNumber],
-  ['Date of birth', doc.dateOfBirth],
+  ['Date of birth', formatDateOnly(doc.dateOfBirth)],
   ['Currently incarcerated', doc.currentlyIncarcerated],
   ['Case manager', doc.caseManager],
   ['Previously incarcerated', doc.previouslyIncarcerated],
   ['Previous incarceration explanation', doc.previousIncarcerationExplanation],
-  ['Parole review date', doc.paroleReviewDate],
-  ['Release date', doc.releaseDate],
+  ['Parole review date', formatDateOnly(doc.paroleReviewDate)],
+  ['Release date', formatDateOnly(doc.releaseDate)],
   ['Veteran', doc.veteran],
   ['Substance use or misuse', doc.substancesUseMisuse],
-  ['Date of last use', doc.dateOfLastUse],
+  ['Date of last use', formatDateOnly(doc.dateOfLastUse)],
   ['Mental / emotional concerns', doc.mentalEmotionalConcerns],
   ['Mental / emotional explanation', doc.mentalEmotionalExplanation],
   ['Pregnant', doc.pregnant],
-  ['Due date', doc.dueDate],
+  ['Due date', formatDateOnly(doc.dueDate)],
   ['Prenatal care', doc.prenatalCare],
   ['Children count', doc.childrenCount],
   ['Where children are living', doc.childrenLivingWhere],
